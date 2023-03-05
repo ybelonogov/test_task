@@ -1,0 +1,7 @@
+<resources>
+
+    <style name="Widget.Theme.VK_test_task.ClockView" parent="">
+        <item name="android:background">@color/gray_400</item>
+        <item name="exampleColor">@color/light_blue_400</item>
+    </style>
+</resources>
