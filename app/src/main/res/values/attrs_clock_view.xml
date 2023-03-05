@@ -1,8 +1,9 @@
 <resources>
     <declare-styleable name="ClockView">
-        <attr name="exampleString" format="string" />
-        <attr name="exampleDimension" format="dimension" />
         <attr name="exampleColor" format="color" />
-        <attr name="exampleDrawable" format="color|reference" />
+        <attr name="SecondHandColor" format="color" />
+        <attr name="MinuteHandColor" format="color" />
+        <attr name="HourHandColor" format="color" />
+        <attr name="ClockFace" format="reference" />
     </declare-styleable>
 </resources>
