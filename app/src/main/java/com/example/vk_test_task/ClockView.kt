@@ -1,6 +1,7 @@
 package com.example.vk_test_task
 
 import android.content.Context
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
@@ -14,9 +15,16 @@ import kotlin.math.sin
 
 
 /**
- * TODO: document your custom view class.
+The `ClockView` class extends the `View` class
+and has custom attributes such as `_clockFace`, `_secondHandColor`, `_minuteHandColor`, and `_hourHandColor`.
+The `ClockView` class has a `setTime` function
+that sets the hour, minute, and second variables of the clock.
+The `drawClockFace` function
+draws a circular clock face using a bitmap image.
+The `onMeasure` function
+sets the dimensions of the view to be a square with the minimum of the width and height.
  */
-class ClockView  @JvmOverloads constructor(
+class ClockView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
@@ -35,50 +43,34 @@ class ClockView  @JvmOverloads constructor(
         get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
 
-//    constructor(context: Context) : super(context) {
-//        init(null, 0)
-//    }
-//
-//    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-//        init(attrs, 0)
-//    }
-//
-//    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
-//        context,
-//        attrs,
-//        defStyle
-//    ) {
-//        init(attrs, defStyle)
-//    }
-
-
-    init{
-        // Load attributes
+    init {
         val a = context.obtainStyledAttributes(
             attrs, R.styleable.ClockView, defStyleAttr, 0
         )
-//        if(layoutParams.height!=layoutParams.width) {
-////            throw Exception("Hey, I am testing it")
-//            error("!2")
-//        }
-        _clockFace = a.getDrawable(
-            R.styleable.ClockView_ClockFace
-        )
 
-        _secondHandColor = a.getColor(
-            R.styleable.ClockView_SecondHandColor, 0
-        )
-        a.recycle()
-        _minuteHandColor = a.getColor(
-            R.styleable.ClockView_MinuteHandColor, 0
-        )
 
-        _hourHandColor = a.getColor(
-            R.styleable.ClockView_HourHandColor, 0
-        )
-        a.recycle()
-        setBackgroundColor(Color.TRANSPARENT)
+
+            _clockFace = a.getDrawable(
+                R.styleable.ClockView_ClockFace
+            )
+
+            _secondHandColor = a.getColor(
+                R.styleable.ClockView_SecondHandColor, 0
+            )
+
+            _minuteHandColor = a.getColor(
+                R.styleable.ClockView_MinuteHandColor, 0
+            )
+
+            _hourHandColor = a.getColor(
+                R.styleable.ClockView_HourHandColor, 0
+            )
+            a.recycle()
+            setBackgroundColor(Color.TRANSPARENT)
+
+
     }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val size = min(measuredWidth, measuredHeight)
@@ -102,7 +94,7 @@ class ClockView  @JvmOverloads constructor(
         style = Paint.Style.STROKE
         color = _secondHandColor
 //        strokeWidth =height*0.0001f
-        strokeWidth=10f
+        strokeWidth = 10f
     }
     private var hour = 0
     private var minute = 0
@@ -132,7 +124,7 @@ class ClockView  @JvmOverloads constructor(
     }
 
     private fun drawSecondArrow(canvas: Canvas?, centerX: Float, centerY: Float) {
-        val secondHandLength = centerX -height*0.05f
+        val secondHandLength = centerX - height * 0.05f
         val secondHandAngle = second * 6f - 90f.toDouble()
         val secondHandX = centerX + cos(Math.toRadians(secondHandAngle)) * secondHandLength
         val secondHandY = centerY + sin(Math.toRadians(secondHandAngle)) * secondHandLength
@@ -147,7 +139,7 @@ class ClockView  @JvmOverloads constructor(
     }
 
     private fun drawMinuteArrow(canvas: Canvas?, centerX: Float, centerY: Float) {
-        val minuteHandLength = centerX - height*0.1f
+        val minuteHandLength = centerX - height * 0.1f
         val minuteHandAngle = (minute + second / 60f) * 6f - 90f.toDouble()
         val minuteHandX = centerX + cos(Math.toRadians(minuteHandAngle)) * minuteHandLength
         val minuteHandY = centerY + sin(Math.toRadians(minuteHandAngle)) * minuteHandLength
@@ -162,20 +154,23 @@ class ClockView  @JvmOverloads constructor(
     }
 
     private fun drawHourArrow(canvas: Canvas?, centerX: Float, centerY: Float) {
-        val hourHandLength = centerX -height*0.2f
+        val hourHandLength = centerX - height * 0.2f
         val hourHandAngle = (hour + minute / 60f) * 30f - 90f.toDouble()
         val hourHandX = centerX + cos(Math.toRadians(hourHandAngle)) * hourHandLength
         val hourHandY = centerY + sin(Math.toRadians(hourHandAngle)) * hourHandLength
 
-        canvas?.drawLine(centerX,
+        canvas?.drawLine(
+            centerX,
             centerY,
             hourHandX.toFloat(),
             hourHandY.toFloat(),
-            hourPaint)
+            hourPaint
+        )
     }
 
-
-
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+    }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)

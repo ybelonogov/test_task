@@ -21,44 +21,46 @@
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.13"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.991" />
+        app:layout_constraintTop_toBottomOf="@+id/clockView2"
+        app:layout_constraintVertical_bias="0.716" />
 
     <com.example.vk_test_task.ClockView
+        android:id="@+id/clockView2"
         style="@style/Widget.Theme.VK_test_task.ClockView"
-        android:layout_width="280dp"
-        android:layout_height="280dp"
+        android:layout_width="278dp"
 
+        android:layout_height="266dp"
         android:background="@android:color/transparent"
         android:clickable="true"
         android:contentDescription="@string/time_now"
         app:ClockFace="@drawable/clock_face_black"
         app:HourHandColor="@color/purple_200"
         app:MinuteHandColor="@color/purple_700"
-        app:SecondHandColor="@color/purple_500"
 
+        app:SecondHandColor="@color/purple_500"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.993"
+        app:layout_constraintHorizontal_bias="0.923"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.498" />
+        app:layout_constraintTop_toBottomOf="@+id/clockView3"
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.example.vk_test_task.ClockView
+        android:id="@+id/clockView3"
         style="@style/Widget.Theme.VK_test_task.ClockView"
         android:layout_width="250dp"
-        android:layout_height="250dp"
 
+        android:layout_height="250dp"
         android:background="@android:color/transparent"
         android:clickable="true"
         android:contentDescription="@string/time_now"
         app:ClockFace="@drawable/clock_face_black_green_numbers"
         app:HourHandColor="@color/purple_700"
         app:MinuteHandColor="@color/light_blue_600"
-        app:SecondHandColor="@color/light_blue_400"
 
+        app:SecondHandColor="@color/light_blue_400"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
