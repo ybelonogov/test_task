@@ -18,7 +18,7 @@
         android:clickable="true"
         android:contentDescription="@string/time_now"
         app:ClockFace="@drawable/clock_face_funny_boy"
-        app:HourHandColor="@color/black"
-        app:MinuteHandColor="@color/black"
-        app:SecondHandColor="@color/black" />
+        app:HourHandColor="@color/green"
+        app:MinuteHandColor="@color/light_blue_400"
+        app:SecondHandColor="@color/teal_700" />
 </FrameLayout>

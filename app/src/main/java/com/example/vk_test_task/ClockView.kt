@@ -6,6 +6,7 @@ import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.view.View
 import java.time.LocalDateTime
 import kotlin.math.cos
 import kotlin.math.min
@@ -15,42 +16,46 @@ import kotlin.math.sin
 /**
  * TODO: document your custom view class.
  */
-class ClockView : androidx.appcompat.widget.AppCompatImageView {
+class ClockView  @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
 
 
     private var _clockFace: Drawable? = null // TODO: use a default from R.dimen...
-    private var _SecondHandColor: Int? = null
-    private var _MinuteHandColor: Int? = null
-    private var _HourHandColor: Int? = null
+    private var _secondHandColor: Int = Color.GREEN
+    private var _minuteHandColor: Int = Color.GREEN
+    private var _hourHandColor: Int = Color.GREEN
 
 
     val Int.dp: Float
-        get() = (this / Resources.getSystem().displayMetrics.density).toFloat()
+        get() = (this / Resources.getSystem().displayMetrics.density)
     val Float.px: Int
         get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
 
-    constructor(context: Context) : super(context) {
-        init(null, 0)
-    }
+//    constructor(context: Context) : super(context) {
+//        init(null, 0)
+//    }
+//
+//    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+//        init(attrs, 0)
+//    }
+//
+//    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
+//        context,
+//        attrs,
+//        defStyle
+//    ) {
+//        init(attrs, defStyle)
+//    }
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init(attrs, 0)
-    }
 
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
-        context,
-        attrs,
-        defStyle
-    ) {
-        init(attrs, defStyle)
-    }
-
-
-    private fun init(attrs: AttributeSet?, defStyle: Int) {
+    init{
         // Load attributes
         val a = context.obtainStyledAttributes(
-            attrs, R.styleable.ClockView, defStyle, 0
+            attrs, R.styleable.ClockView, defStyleAttr, 0
         )
 //        if(layoutParams.height!=layoutParams.width) {
 ////            throw Exception("Hey, I am testing it")
@@ -60,52 +65,51 @@ class ClockView : androidx.appcompat.widget.AppCompatImageView {
             R.styleable.ClockView_ClockFace
         )
 
-        _SecondHandColor = a.getColor(
+        _secondHandColor = a.getColor(
             R.styleable.ClockView_SecondHandColor, 0
         )
-
-        _MinuteHandColor = a.getColor(
+        a.recycle()
+        _minuteHandColor = a.getColor(
             R.styleable.ClockView_MinuteHandColor, 0
         )
 
-        _HourHandColor = a.getColor(
+        _hourHandColor = a.getColor(
             R.styleable.ClockView_HourHandColor, 0
         )
         a.recycle()
         setBackgroundColor(Color.TRANSPARENT)
     }
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        val size = min(measuredWidth, measuredHeight)
+        setMeasuredDimension(size, size)
+    }
 
 
     private val hourPaint = Paint().apply {
-        if (_HourHandColor != null)
-            color = _HourHandColor!!
-        else
-            color = Color.GREEN
+        color = _hourHandColor
+//        strokeWidth =height*0.0003f
         strokeWidth = 20f
     }
 
     private val minutePaint = Paint().apply {
-        if (_MinuteHandColor != null)
-            color = _MinuteHandColor!!
-        else
-            color = Color.GREEN
+        color = _minuteHandColor
+//        strokeWidth =height*0.0002f
         strokeWidth = 15f
     }
 
     private val secondPaint = Paint().apply {
-        if (_SecondHandColor != null)
-            color = _SecondHandColor!!
-        else
-            color = Color.GREEN
-        strokeWidth = 10f
-
+        style = Paint.Style.STROKE
+        color = _secondHandColor
+//        strokeWidth =height*0.0001f
+        strokeWidth=10f
     }
     private var hour = 0
     private var minute = 0
     private var second = 0
 
 
-    fun setTime(hour: Int, minute: Int, second: Int) {
+    private fun setTime(hour: Int, minute: Int, second: Int) {
         this.hour = hour
         this.minute = minute
         this.second = second
@@ -128,7 +132,7 @@ class ClockView : androidx.appcompat.widget.AppCompatImageView {
     }
 
     private fun drawSecondArrow(canvas: Canvas?, centerX: Float, centerY: Float) {
-        val secondHandLength = centerX - 10f.px
+        val secondHandLength = centerX -height*0.05f
         val secondHandAngle = second * 6f - 90f.toDouble()
         val secondHandX = centerX + cos(Math.toRadians(secondHandAngle)) * secondHandLength
         val secondHandY = centerY + sin(Math.toRadians(secondHandAngle)) * secondHandLength
@@ -143,7 +147,7 @@ class ClockView : androidx.appcompat.widget.AppCompatImageView {
     }
 
     private fun drawMinuteArrow(canvas: Canvas?, centerX: Float, centerY: Float) {
-        val minuteHandLength = centerX - 30f.px
+        val minuteHandLength = centerX - height*0.1f
         val minuteHandAngle = (minute + second / 60f) * 6f - 90f.toDouble()
         val minuteHandX = centerX + cos(Math.toRadians(minuteHandAngle)) * minuteHandLength
         val minuteHandY = centerY + sin(Math.toRadians(minuteHandAngle)) * minuteHandLength
@@ -158,25 +162,19 @@ class ClockView : androidx.appcompat.widget.AppCompatImageView {
     }
 
     private fun drawHourArrow(canvas: Canvas?, centerX: Float, centerY: Float) {
-        val hourHandLength = centerX - 50f.px
+        val hourHandLength = centerX -height*0.2f
         val hourHandAngle = (hour + minute / 60f) * 30f - 90f.toDouble()
         val hourHandX = centerX + cos(Math.toRadians(hourHandAngle)) * hourHandLength
         val hourHandY = centerY + sin(Math.toRadians(hourHandAngle)) * hourHandLength
 
-        canvas?.drawLine(centerX, centerY, hourHandX.toFloat(), hourHandY.toFloat(), hourPaint)
+        canvas?.drawLine(centerX,
+            centerY,
+            hourHandX.toFloat(),
+            hourHandY.toFloat(),
+            hourPaint)
     }
 
-//        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.arrow_red)
-//         val arrowBitmap = BitmapFactory.decodeResource(resources, R.drawable.arrow_red)
-//        val arrowWidth = arrowBitmap.width.toFloat()
-//         val arrowHeight = arrowBitmap.height.toFloat()
-//        val length = 100f
 
-    // рисуем стрелку
-//        canvas?.save()
-//        canvas?.rotate(20f) // поворачиваем на 90 градусов (можно изменить на нужный угол)
-//        canvas?.drawBitmap(arrowBitmap, centerX, centerY , null)
-//        canvas?.restore()
 
 
     override fun onDraw(canvas: Canvas?) {
