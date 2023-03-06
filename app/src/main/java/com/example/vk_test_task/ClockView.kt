@@ -2,7 +2,6 @@ package com.example.vk_test_task
 
 import android.content.Context
 import android.content.res.Configuration
-import android.content.res.Resources
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
@@ -37,10 +36,7 @@ class ClockView @JvmOverloads constructor(
     private var _hourHandColor: Int = Color.GREEN
 
 
-    val Int.dp: Float
-        get() = (this / Resources.getSystem().displayMetrics.density)
-    val Float.px: Int
-        get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+
 
 
     init {
